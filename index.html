@@ -3,8 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ThugLab — Experimental Hardware Lab</title>
-  <meta name="description" content="Comercialización de equipos tecnológicos, soporte IT y desarrollo de soluciones digitales. Santiago, Chile." />
+  <title>ThugLab — Software, Hardware & IA Aplicada</title>
+  <meta name="description" content="Software a medida, prototipado de hardware e IA aplicada para operaciones que no pueden fallar. Santiago, Chile." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ThugLab — Software, Hardware & IA Aplicada" />
+  <meta property="og:description" content="Software a medida, prototipado de hardware e IA aplicada para operaciones que no pueden fallar. Santiago, Chile." />
+  <meta property="og:url" content="https://thuglab.cl" />
+  <meta property="og:image" content="https://thuglab.cl/assets/icon-512.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="ThugLab — Software, Hardware & IA Aplicada" />
+  <meta name="twitter:description" content="Software a medida, prototipado de hardware e IA aplicada para operaciones que no pueden fallar." />
+  <meta name="twitter:image" content="https://thuglab.cl/assets/icon-512.png" />
 
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="icon" href="assets/icon-192.png" type="image/png" />
@@ -21,7 +31,7 @@
       --green-glow:  rgba(57,211,83,.2);
       --black:       #000000;
       --text:        #9fcca9;
-      --muted:       #3d6645;
+      --muted:       #5c9a6b;
       --border:      #162b1a;
     }
 
@@ -107,7 +117,7 @@
 
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
 
-    nav ul { display: flex; gap: 2rem; list-style: none; }
+    nav ul { display: flex; gap: 1.8rem; list-style: none; }
 
     nav ul a {
       color: var(--muted);
@@ -153,7 +163,6 @@
 
     .hero-body { padding: 2.5rem 2.5rem 2rem; text-align: center; }
 
-    /* Logo image */
     .hero-logo {
       width: min(300px, 70vw);
       margin-bottom: 1.8rem;
@@ -166,7 +175,6 @@
       50%      { filter: drop-shadow(0 0 32px rgba(57,211,83,.65)); }
     }
 
-    /* ASCII wordmark */
     .ascii-mark {
       font-size: clamp(.48rem, 1.4vw, .78rem);
       line-height: 1.25;
@@ -182,7 +190,7 @@
     .tagline {
       font-size: .82rem;
       color: var(--muted);
-      letter-spacing: .22em;
+      letter-spacing: .18em;
       text-transform: uppercase;
       margin-bottom: .4rem;
     }
@@ -202,11 +210,10 @@
       font-size: .85rem;
       color: var(--text);
       line-height: 1.85;
-      max-width: 480px;
+      max-width: 520px;
       margin: 0 auto 2.2rem;
     }
 
-    /* Blinking cursor */
     .cur {
       display: inline-block;
       width: .55em; height: 1em;
@@ -279,21 +286,38 @@
       animation: blink .75s step-end infinite;
     }
 
-    /* ─── SERVICES ─── */
+    .sec-sub {
+      font-size: .82rem;
+      color: var(--text);
+      max-width: 640px;
+      margin: -2rem 0 3rem;
+      line-height: 1.8;
+    }
+
+    /* ─── GRID / CARDS (Servicios + Portafolio) ─── */
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
       border: 1px solid var(--green-dim);
     }
 
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      border: 1px solid var(--green-dim);
+      border-top: none;
+    }
+
     .card {
       padding: 2rem 1.8rem;
       border-right: 1px solid var(--green-dim);
+      border-bottom: 1px solid var(--green-dim);
       position: relative;
       transition: background .2s;
     }
 
-    .card:last-child { border-right: none; }
+    .grid-3 .card:last-child { border-right: none; }
+    .grid-2 .card:nth-child(2n) { border-right: none; }
     .card:hover { background: rgba(57,211,83,.025); }
 
     .card-id {
@@ -301,7 +325,21 @@
       color: var(--muted);
       letter-spacing: .15em;
       margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+
+    .badge {
+      font-size: .62rem;
+      letter-spacing: .1em;
+      padding: .15rem .5rem;
+      border: 1px solid var(--green-dim);
+      color: var(--green);
+      text-transform: uppercase;
+    }
+
+    .badge.dev { color: #ffce6f; border-color: #4a3a1c; }
 
     .card-head {
       font-size: .88rem;
@@ -343,7 +381,39 @@
       padding-top: 1rem;
     }
 
-    /* ─── NOSOTROS ─── */
+    /* ─── HARDWARE LAB STRIP ─── */
+    .lab-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      border: 1px solid var(--green-dim);
+      border-top: none;
+      margin-top: 1.5rem;
+    }
+
+    .lab-item {
+      padding: 1.3rem 1.5rem;
+      border-right: 1px solid var(--green-dim);
+      border-bottom: 1px solid var(--green-dim);
+    }
+
+    .lab-strip .lab-item:last-child { border-right: none; }
+
+    .lab-item-title {
+      font-size: .78rem;
+      color: var(--green);
+      letter-spacing: .06em;
+      margin-bottom: .4rem;
+    }
+
+    .lab-item-title::before { content: '// '; color: var(--green-dim); }
+
+    .lab-item-desc {
+      font-size: .72rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ─── TRAYECTORIA (terminal) ─── */
     .terminal {
       border: 1px solid var(--green-dim);
       position: relative;
@@ -416,9 +486,23 @@
 
     .cp-text strong { color: var(--green); }
 
+    .cp-mail {
+      display: inline-block;
+      margin-top: .6rem;
+      color: var(--green);
+      font-size: 1rem;
+      text-decoration: none;
+      border-bottom: 1px solid var(--green-dim);
+      padding-bottom: .2rem;
+      transition: all .15s;
+    }
+
+    .cp-mail:hover { color: var(--green-hi); border-color: var(--green); }
+
     .cp-sub {
       font-size: .78rem;
       color: var(--muted);
+      margin-top: 1.2rem;
     }
 
     .cp-sub span { color: var(--green); }
@@ -439,9 +523,10 @@
     @media (max-width: 640px) {
       nav ul { display: none; }
       .hero-body { padding: 1.8rem 1.2rem 1.5rem; }
-      .grid-3 { grid-template-columns: 1fr; }
-      .card { border-right: none; border-bottom: 1px solid var(--green-dim); }
-      .card:last-child { border-bottom: none; }
+      .grid-3, .grid-2, .lab-strip { grid-template-columns: 1fr; }
+      .card { border-right: none; }
+      .lab-item { border-right: none; }
+      .sec-sub { margin-top: 0; }
     }
   </style>
 </head>
@@ -459,7 +544,8 @@
   </div>
   <ul>
     <li><a href="#servicios">SERVICIOS</a></li>
-    <li><a href="#nosotros">NOSOTROS</a></li>
+    <li><a href="#portafolio">PORTAFOLIO</a></li>
+    <li><a href="#trayectoria">TRAYECTORIA</a></li>
     <li><a href="#contacto">CONTACTO</a></li>
   </ul>
 </nav>
@@ -473,7 +559,7 @@
       <div class="box-dot"></div>
       <div class="box-dot"></div>
       <span class="box-title">THUGLAB.SYS</span>
-      <span style="margin-left:auto">v1.0.0</span>
+      <span style="margin-left:auto">v1.1.0</span>
     </div>
 
     <div class="hero-body">
@@ -484,12 +570,13 @@
   | |  | __ | |_| | (_ | |__ / _ \| _ \
   |_|  |_||_|\___/ \___|____/_/ \_\___/</pre>
 
-      <p class="tagline">Experimental Hardware Lab<span class="cur"></span></p>
+      <p class="tagline">Software · Hardware · IA Aplicada<span class="cur"></span></p>
       <p class="location">Santiago, Chile &nbsp;·&nbsp; EST. 2026</p>
 
       <p class="hero-desc">
-        Comercialización de equipos tecnológicos,<br>
-        soporte IT y desarrollo de soluciones digitales.
+        Diseñamos software de producción, prototipamos hardware conectado<br>
+        y aplicamos IA a problemas operativos reales — para operaciones<br>
+        que no pueden fallar.
       </p>
 
       <a href="#contacto" class="btn">CONTACTAR</a>
@@ -517,47 +604,47 @@
     <div class="grid-3">
 
       <div class="card">
-        <p class="card-id">[01/03] ─ HARDWARE</p>
-        <h3 class="card-head">Hardware &amp; Componentes</h3>
+        <p class="card-id">[01/03] ─ SOFTWARE</p>
+        <h3 class="card-head">Software a Medida</h3>
         <ul class="feat">
-          <li>Equipos y componentes</li>
-          <li>Importación / exportación</li>
-          <li>Insumos electrónicos</li>
-          <li>Distribución nacional</li>
+          <li>Arquitectura enterprise (Clean Architecture, CQRS)</li>
+          <li>APIs y backends de producción</li>
+          <li>Apps móviles offline-first</li>
+          <li>Integración con sistemas empresariales (SAP, ERP)</li>
         </ul>
         <p class="card-desc">
-          Venta y distribución de equipos, componentes e insumos
-          tecnológicos para proyectos de cualquier escala.
+          Diseño y desarrollo de software a medida para operaciones que
+          no pueden fallar, desde backends enterprise hasta apps de campo.
         </p>
       </div>
 
       <div class="card">
-        <p class="card-id">[02/03] ─ SOPORTE</p>
-        <h3 class="card-head">Soporte IT</h3>
+        <p class="card-id">[02/03] ─ HARDWARE</p>
+        <h3 class="card-head">Prototipado &amp; IoT</h3>
         <ul class="feat">
-          <li>Diagnóstico técnico</li>
-          <li>Mantención preventiva</li>
-          <li>Integración de sistemas</li>
-          <li>Capacitación</li>
+          <li>Microcontroladores (ESP32, Arduino)</li>
+          <li>Sistemas embebidos (Raspberry Pi)</li>
+          <li>Sensores, GPS, comunicación inalámbrica</li>
+          <li>Integración física-digital</li>
         </ul>
         <p class="card-desc">
-          Soporte técnico, mantención y capacitación para empresas
-          y usuarios que necesitan soluciones reales.
+          De la idea al dispositivo funcional: firmware, sensores y
+          dashboards en tiempo real para hardware conectado.
         </p>
       </div>
 
       <div class="card">
-        <p class="card-id">[03/03] ─ DIGITAL</p>
-        <h3 class="card-head">Soluciones Digitales</h3>
+        <p class="card-id">[03/03] ─ IA</p>
+        <h3 class="card-head">IA &amp; Automatización</h3>
         <ul class="feat">
-          <li>Desarrollo tecnológico</li>
-          <li>Soluciones educativas</li>
-          <li>Integración digital</li>
-          <li>Consultoría</li>
+          <li>Agentes de IA (Claude, LLMs)</li>
+          <li>Automatización de procesos (RPA)</li>
+          <li>Integración de APIs de IA</li>
+          <li>Asesoría técnica</li>
         </ul>
         <p class="card-desc">
-          Desarrollo y comercialización de soluciones tecnológicas
-          y educativas adaptadas a tu negocio.
+          Aplicamos IA donde resuelve problemas reales: clasificación
+          automática, agentes operativos y procesos repetitivos.
         </p>
       </div>
 
@@ -570,10 +657,88 @@
   ════════════════════════════════════════════════════════════════════════
 </div>
 
-<!-- ════ NOSOTROS ════ -->
-<section id="nosotros">
+<!-- ════ PORTAFOLIO ════ -->
+<section id="portafolio">
   <div class="sec">
-    <p class="sec-label">02 NOSOTROS</p>
+    <p class="sec-label">02 PORTAFOLIO</p>
+    <h2 class="sec-title">LO QUE CONSTRUIMOS</h2>
+    <p class="sec-sub">
+      Productos propios y en desarrollo. Cada uno combina al menos dos
+      de nuestras tres áreas: software, hardware o IA.
+    </p>
+
+    <div class="grid-2">
+
+      <div class="card">
+        <p class="card-id">MINDEXA <span class="badge">Cofundador</span></p>
+        <h3 class="card-head">Plataforma de Salud Mental</h3>
+        <p class="card-desc">
+          Conecta pacientes con profesionales de salud mental, con
+          evaluaciones clínicas estandarizadas y motor propio de
+          autodiagnóstico diario. Con protección de propiedad industrial.
+        </p>
+      </div>
+
+      <div class="card">
+        <p class="card-id">PLANTCARE CONNECT <span class="badge dev">En desarrollo</span></p>
+        <h3 class="card-head">API de Monitoreo de Plantas</h3>
+        <p class="card-desc">
+          API propia para riego, luz y temperatura en tiempo real, con
+          kits físicos ESP32 + sensores opcionales. Nuestro proyecto
+          insignia: software, hardware e IA en un solo producto.
+        </p>
+      </div>
+
+      <div class="card">
+        <p class="card-id">GITLAB MONITOR <span class="badge">Producto propio</span></p>
+        <h3 class="card-head">Analítica de GitLab</h3>
+        <p class="card-desc">
+          Plataforma de monitoreo en tiempo real para instancias GitLab,
+          con resúmenes ejecutivos generados por IA vía Claude API.
+        </p>
+      </div>
+
+      <div class="card">
+        <p class="card-id">DEVOPS ASSISTANT <span class="badge">Hackathon Nerdearla 2026</span></p>
+        <h3 class="card-head">Agente DevOps</h3>
+        <p class="card-desc">
+          Agente construido con AWS Strands Agents SDK, integrado a
+          GitLab API y Gmail para automatizar tareas operativas de DevOps.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="lab-strip">
+      <div class="lab-item">
+        <p class="lab-item-title">Star Tracker</p>
+        <p class="lab-item-desc">Raspberry Pi + motores paso a paso para seguimiento astronómico y astrofotografía.</p>
+      </div>
+      <div class="lab-item">
+        <p class="lab-item-title">Recepción Biométrica</p>
+        <p class="lab-item-desc">Control de acceso con lectura biométrica y registro de asistencia sobre Raspberry Pi.</p>
+      </div>
+      <div class="lab-item">
+        <p class="lab-item-title">Pañol</p>
+        <p class="lab-item-desc">Gestión de inventario, préstamos y devoluciones de herramientas y materiales.</p>
+      </div>
+      <div class="lab-item">
+        <p class="lab-item-title">WiFi/BLE Sniffer</p>
+        <p class="lab-item-desc">ESP32-WROVER + OLED con dashboard web embebido para análisis de redes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ DIVIDER ════ -->
+<div class="rule">
+  ════════════════════════════════════════════════════════════════════════
+</div>
+
+<!-- ════ TRAYECTORIA ════ -->
+<section id="trayectoria">
+  <div class="sec">
+    <p class="sec-label">03 TRAYECTORIA</p>
     <h2 class="sec-title">QUIÉNES SOMOS</h2>
 
     <div class="terminal">
@@ -586,13 +751,15 @@
       </div>
       <div class="term-body">
         <div class="t-line"><span class="p">$</span><span class="c">cat about.txt</span></div>
-        <div class="t-line"><span class="o">ThugLab SpA es una empresa de tecnología con base en Santiago, Chile.</span></div>
-        <div class="t-line"><span class="o">Nacimos para acercar el hardware de calidad y los servicios informáticos</span></div>
-        <div class="t-line"><span class="o">a proyectos que necesitan soluciones reales, sin rodeos.</span></div>
+        <div class="t-line"><span class="o">ThugLab SpA es un estudio de ingenieria con base en Santiago, Chile.</span></div>
+        <div class="t-line"><span class="o">Construimos software de produccion, hardware conectado y soluciones</span></div>
+        <div class="t-line"><span class="o">de IA aplicada para operaciones que no pueden fallar.</span></div>
         <div class="t-line">&nbsp;</div>
-        <div class="t-line"><span class="cm"># Especialidad: cadena completa de tecnología.</span></div>
-        <div class="t-line"><span class="cm"># Desde conseguir el componente correcto hasta integrarlo,</span></div>
-        <div class="t-line"><span class="cm"># mantenerlo y enseñar a usarlo.</span></div>
+        <div class="t-line"><span class="cm"># Detras de thugLab hay trayectoria real: liderazgo tecnico de</span></div>
+        <div class="t-line"><span class="cm"># sistemas desplegados en mas de 14 faenas de una minera estatal,</span></div>
+        <div class="t-line"><span class="cm"># cofundacion de una plataforma de salud mental con proteccion de</span></div>
+        <div class="t-line"><span class="cm"># propiedad industrial, y prototipos de hardware que van desde</span></div>
+        <div class="t-line"><span class="cm"># control de acceso biometrico hasta seguimiento astronomico.</span></div>
         <div class="t-line">&nbsp;</div>
         <div class="t-line"><span class="p">$</span><span class="cur"></span></div>
       </div>
@@ -609,13 +776,14 @@
 <!-- ════ CONTACTO ════ -->
 <section id="contacto">
   <div class="sec">
-    <p class="sec-label">03 CONTACTO</p>
+    <p class="sec-label">04 CONTACTO</p>
     <h2 class="sec-title">HABLEMOS</h2>
 
     <div class="contact-panel">
-      <p class="cp-icon">[?]</p>
-      <p class="cp-text">Canales de contacto <strong>próximamente.</strong></p>
-      <p class="cp-sub">Visítanos en <span>thuglab.cl</span></p>
+      <p class="cp-icon">[@]</p>
+      <p class="cp-text">Escríbenos directamente, sin formularios de por medio.</p>
+      <a href="mailto:contacto@thuglab.cl" class="cp-mail">contacto@thuglab.cl</a>
+      <p class="cp-sub">Santiago, Chile &nbsp;·&nbsp; <span>thuglab.cl</span></p>
     </div>
 
   </div>
