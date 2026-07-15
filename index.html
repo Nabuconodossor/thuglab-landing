@@ -299,6 +299,135 @@
       max-width: 240px;
     }
 
+    /* ─── PLANTCARE CONNECT (spotlight) ─── */
+    .spotlight-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .spotlight-card:hover { border-color: var(--accent-blue-dim); }
+
+    .spotlight-visual {
+      position: relative;
+      min-height: 220px;
+      background: var(--bg-ground);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spotlight-badges {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 3px;
+      border: 1px solid var(--accent-blue);
+      color: var(--accent-blue);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+    }
+    .badge.copper { border-color: var(--accent-copper); color: var(--accent-copper); }
+
+    .spotlight-sensors {
+      display: flex;
+      gap: 56px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .sensor {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sensor .icon { width: 32px; height: 32px; }
+
+    .sensor span {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+
+    .spotlight-body {
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .spotlight-body h3 {
+      font-weight: 600;
+      font-size: 22px;
+      color: var(--text-primary);
+    }
+
+    .spotlight-tagline {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--accent-blue);
+    }
+
+    .spotlight-body p.desc {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-muted);
+      max-width: 640px;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag-row .tag {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 3px;
+      background: rgba(62, 123, 250, 0.12);
+      color: var(--accent-blue);
+      font-size: 11px;
+    }
+
+    .spotlight-stats {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    .stat {
+      flex: 1 1 0;
+      min-width: 160px;
+      text-align: center;
+    }
+
+    .stat .stat-value {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--accent-blue);
+    }
+
+    .stat .stat-label {
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
     /* ─── TRAYECTORIA ─── */
     .about-panel {
       border: 1px solid var(--border);
@@ -369,6 +498,8 @@
       .hero-panel { padding: 40px 24px; }
       nav { padding: 16px 24px; }
       .nav-links { order: 3; flex-basis: 100%; justify-content: center; }
+      .spotlight-body { padding: 24px; }
+      .spotlight-sensors { gap: 32px; }
     }
   </style>
 </head>
@@ -481,10 +612,65 @@
   </div>
 </section>
 
+<!-- ════ PLANTCARE CONNECT ════ -->
+<section id="plantcare" class="sec">
+  <div class="sec-header">
+    <p class="eyebrow mono">03 · PROYECTO INSIGNIA</p>
+    <h2 class="sec-title">Lo que estamos construyendo</h2>
+  </div>
+  <div class="spotlight-card">
+    <div class="spotlight-visual">
+      <div class="spotlight-badges">
+        <span class="badge copper mono">EN DESARROLLO</span>
+        <span class="badge mono">HARDWARE + SOFTWARE + IA</span>
+      </div>
+      <div class="spotlight-sensors">
+        <div class="sensor">
+          <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3.58667L23.5467 11.1333C25.0391 12.6248 26.0557 14.5254 26.4679 16.5947C26.88 18.6641 26.6692 20.8091 25.8621 22.7586C25.0549 24.7081 23.6878 26.3744 21.9335 27.5468C20.1792 28.7192 18.1166 29.3449 16.0067 29.3449C13.8967 29.3449 11.8341 28.7192 10.0799 27.5468C8.32558 26.3744 6.95841 24.7081 6.15128 22.7586C5.34415 20.8091 5.13333 18.6641 5.54547 16.5947C5.95761 14.5254 6.97421 12.6248 8.46667 11.1333L16 3.58667Z"/></svg>
+          <span class="mono">RIEGO</span>
+        </div>
+        <div class="sensor">
+          <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 1.33337V4.00004M16 28V30.6667M5.62665 5.62671L7.51998 7.52004M24.48 24.48L26.3733 26.3734M1.33331 16H3.99998M28 16H30.6666M5.62665 26.3734L7.51998 24.48M24.48 7.52004L26.3733 5.62671M22.6666 16C22.6666 19.6819 19.6819 22.6667 16 22.6667C12.3181 22.6667 9.33331 19.6819 9.33331 16C9.33331 12.3181 12.3181 9.33337 16 9.33337C19.6819 9.33337 22.6666 12.3181 22.6666 16Z"/></svg>
+          <span class="mono">LUZ</span>
+        </div>
+        <div class="sensor">
+          <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18.6666 19.68V4.66671C18.6666 3.78265 18.3155 2.93481 17.6903 2.30968C17.0652 1.68456 16.2174 1.33337 15.3333 1.33337C14.4493 1.33337 13.6014 1.68456 12.9763 2.30968C12.3512 2.93481 12 3.78265 12 4.66671V19.68C10.9297 20.3952 10.1177 21.4355 9.68408 22.6475C9.25041 23.8595 9.21801 25.1788 9.59166 26.4106C9.96531 27.6424 10.7252 28.7213 11.7591 29.4881C12.793 30.2549 14.0461 30.6689 15.3333 30.6689C16.6205 30.6689 17.8736 30.2549 18.9075 29.4881C19.9414 28.7213 20.7013 27.6424 21.075 26.4106C21.4486 25.1788 21.4162 23.8595 20.9826 22.6475C20.5489 21.4355 19.7369 20.3952 18.6666 19.68Z"/></svg>
+          <span class="mono">TEMPERATURA</span>
+        </div>
+      </div>
+    </div>
+    <div class="spotlight-body">
+      <h3>PlantCare Connect</h3>
+      <p class="spotlight-tagline mono">API DE MONITOREO DE PLANTAS</p>
+      <p class="desc">API propia para riego, luz y temperatura en tiempo real, con kits físicos ESP32 + sensores opcionales. Nuestro proyecto insignia: software, hardware e IA en un solo producto.</p>
+      <div class="tag-row mono">
+        <span class="tag">ESP32</span>
+        <span class="tag">SENSORES</span>
+        <span class="tag">API REST</span>
+        <span class="tag">DASHBOARD</span>
+      </div>
+      <div class="spotlight-stats">
+        <div class="stat">
+          <p class="stat-value">3 sensores</p>
+          <p class="stat-label mono">RIEGO · LUZ · TEMPERATURA</p>
+        </div>
+        <div class="stat">
+          <p class="stat-value">Kit físico</p>
+          <p class="stat-label mono">ESP32 + SENSORES OPCIONALES</p>
+        </div>
+        <div class="stat">
+          <p class="stat-value">Tiempo real</p>
+          <p class="stat-label mono">DASHBOARD WEB + ALERTAS</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ════ TRAYECTORIA ════ -->
 <section id="trayectoria" class="sec">
   <div class="sec-header">
-    <p class="eyebrow mono">03 · TRAYECTORIA</p>
+    <p class="eyebrow mono">04 · TRAYECTORIA</p>
     <h2 class="sec-title">Quiénes somos</h2>
   </div>
   <div class="about-panel">
@@ -495,7 +681,7 @@
 
 <!-- ════ CONTACTO ════ -->
 <section id="contacto" class="sec">
-  <p class="eyebrow mono">04 · CONTACTO</p>
+  <p class="eyebrow mono">05 · CONTACTO</p>
   <h2 class="sec-title">Hablemos</h2>
   <div class="contact-panel">
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6M22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6M22 6L12 13L2 6"/></svg>
