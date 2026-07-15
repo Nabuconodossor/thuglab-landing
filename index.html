@@ -135,6 +135,11 @@
       display: flex;
       justify-content: center;
       padding: 96px 64px 88px;
+      background-image:
+        linear-gradient(to right, rgba(31,58,102,.35) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(31,58,102,.35) 1px, transparent 1px);
+      background-size: 120px 120px;
+      background-position: center top;
     }
 
     .hero-panel {
@@ -206,6 +211,15 @@
     }
     .corner-tick.left { left: -1px; }
     .corner-tick.right { right: -1px; }
+
+    /* ─── ICONS ─── */
+    .icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      color: var(--accent-blue);
+    }
+    .icon.copper { color: var(--accent-copper); }
 
     /* ─── SERVICIOS / CARDS ─── */
     .grid-3 {
@@ -397,6 +411,7 @@
   </div>
   <div class="grid-3">
     <div class="card">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18L22 12L16 6M8 6L2 12L8 18"/></svg>
       <p class="card-id mono">01/03</p>
       <h3>Software a Medida</h3>
       <ul>
@@ -408,6 +423,7 @@
       <p class="desc">Diseño y desarrollo de software a medida para operaciones que no pueden fallar, desde backends enterprise hasta apps de campo.</p>
     </div>
     <div class="card">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1V4M15 1V4M9 20V23M15 20V23M20 9H23M20 14H23M1 9H4M1 14H4M6 4H18C19.1046 4 20 4.89543 20 6V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V6C4 4.89543 4.89543 4 6 4ZM9 9H15V15H9V9Z"/></svg>
       <p class="card-id mono">02/03</p>
       <h3>Prototipado &amp; IoT</h3>
       <ul>
@@ -419,6 +435,7 @@
       <p class="desc">De la idea al dispositivo funcional: firmware, sensores y dashboards en tiempo real para hardware conectado.</p>
     </div>
     <div class="card">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14H12L11 22L21 10H12L13 2Z"/></svg>
       <p class="card-id mono">03/03</p>
       <h3>IA &amp; Automatización</h3>
       <ul>
@@ -440,21 +457,25 @@
   </div>
   <div class="steps">
     <div class="step step-01">
+      <svg class="icon copper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"/></svg>
       <p class="step-num mono">01</p>
       <h3>Diagnóstico</h3>
       <p>Entendemos el problema real: la operación, los datos disponibles y las restricciones técnicas.</p>
     </div>
     <div class="step">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2L16.5 5.5L18 13L13 18L5.5 16.5L2 2ZM2 2L9.586 9.586M12 19L19 12L22 15L15 22L12 19ZM13 11C13 12.1046 12.1046 13 11 13C9.89543 13 9 12.1046 9 11C9 9.89543 9.89543 9 11 9C12.1046 9 13 9.89543 13 11Z"/></svg>
       <p class="step-num mono">02</p>
       <h3>Diseño</h3>
       <p>Arquitectura y prototipo mínimo viable, validado contigo antes de construir nada definitivo.</p>
     </div>
     <div class="step">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3C14.5168 6.48693 14.4141 6.73825 14.4141 7C14.4141 7.26175 14.5168 7.51307 14.7 7.7L16.3 9.3C16.4869 9.48323 16.7382 9.58586 17 9.58586C17.2617 9.58586 17.513 9.48323 17.7 9.3L21.47 5.53C21.9728 6.64119 22.1251 7.87923 21.9064 9.07915C21.6878 10.2791 21.1087 11.3839 20.2463 12.2463C19.3838 13.1088 18.279 13.6879 17.0791 13.9065C15.8792 14.1252 14.6412 13.9729 13.53 13.47L6.62 20.38C6.22217 20.7778 5.68261 21.0013 5.12 21.0013C4.55739 21.0013 4.01783 20.7778 3.62 20.38C3.22217 19.9822 2.99868 19.4426 2.99868 18.88C2.99868 18.3174 3.22217 17.7778 3.62 17.38L10.53 10.47C10.0271 9.35881 9.87491 8.12077 10.0935 6.92085C10.3121 5.72094 10.8913 4.61616 11.7537 3.75372C12.6161 2.89129 13.7209 2.31217 14.9208 2.09354C16.1207 1.87492 17.3588 2.02716 18.47 2.53L14.7 6.3Z"/></svg>
       <p class="step-num mono">03</p>
       <h3>Construcción</h3>
       <p>Desarrollo iterativo con entregas frecuentes y visibilidad total del avance.</p>
     </div>
     <div class="step">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.93 4.93L9.17 9.17M14.83 14.83L19.07 19.07M19.07 4.93L14.83 9.17M4.93 19.07L9.17 14.83M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z"/></svg>
       <p class="step-num mono">04</p>
       <h3>Soporte</h3>
       <p>Acompañamiento post-entrega: monitoreo, ajustes y evolución del sistema en producción.</p>
@@ -479,6 +500,7 @@
   <p class="eyebrow mono">04 · CONTACTO</p>
   <h2 class="sec-title">Hablemos</h2>
   <div class="contact-panel">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6M22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6M22 6L12 13L2 6"/></svg>
     <p class="cp-text">Escríbenos directamente, sin formularios de por medio.</p>
     <a href="mailto:contacto@thuglab.cl" class="contact-mail">contacto@thuglab.cl</a>
     <p class="cp-loc mono">SANTIAGO, CHILE · THUGLAB.CL</p>
