@@ -21,512 +21,342 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="manifest" href="manifest.json" />
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green:       #39d353;
-      --green-hi:    #6fff8a;
-      --green-dim:   #1c4a27;
-      --green-glow:  rgba(57,211,83,.2);
-      --black:       #000000;
-      --text:        #9fcca9;
-      --muted:       #5c9a6b;
-      --border:      #162b1a;
+      --bg-ground:      #12161a;
+      --border:         #2a323b;
+      --text-primary:   #edf1f4;
+      --text-muted:     #8b96a3;
+      --accent-blue:    #3e7bfa;
+      --accent-blue-dim:#1f3a66;
+      --accent-copper:  #b8794a;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Courier New', Courier, monospace;
-      background: var(--black);
-      color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg-ground);
+      color: var(--text-primary);
+      line-height: 1.5;
     }
 
-    /* Scanlines overlay */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent 0px,
-        transparent 3px,
-        rgba(0,0,0,.07) 3px,
-        rgba(0,0,0,.07) 4px
-      );
-      pointer-events: none;
-      z-index: 9999;
+    .mono {
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-weight: 500;
     }
 
-    ::selection { background: var(--green); color: var(--black); }
+    ::selection { background: var(--accent-blue); color: var(--bg-ground); }
 
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--black); }
-    ::-webkit-scrollbar-thumb { background: var(--green-dim); }
+    a { color: inherit; text-decoration: none; }
 
     /* ─── NAV ─── */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: .55rem 1.5rem;
-      background: rgba(0,0,0,.92);
-      border-bottom: 1px solid var(--green-dim);
-      font-size: .78rem;
-      letter-spacing: .06em;
+      flex-wrap: wrap;
+      gap: 16px 32px;
+      padding: 20px 64px;
+      border-bottom: 1px solid var(--border);
     }
 
     .nav-brand {
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: -0.18px;
+      color: var(--text-primary);
+    }
+
+    .nav-links {
       display: flex;
-      align-items: center;
-      gap: .5rem;
-      text-decoration: none;
-      color: var(--green);
-      font-weight: bold;
-    }
-
-    .nav-brand img {
-      width: 26px;
-      height: 26px;
-      object-fit: contain;
-    }
-
-    .nav-brand .dim { color: var(--muted); }
-
-    .nav-status {
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-      color: var(--green);
-      font-size: .72rem;
-    }
-
-    .dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 6px var(--green);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
-
-    nav ul { display: flex; gap: 1.8rem; list-style: none; }
-
-    nav ul a {
-      color: var(--muted);
-      text-decoration: none;
-      transition: color .15s;
-    }
-
-    nav ul a:hover { color: var(--green); }
-    nav ul a:hover::before { content: '> '; }
-
-    /* ─── HERO ─── */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
+      gap: 40px;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text-muted);
+      order: 3;
+      flex-basis: 100%;
       justify-content: center;
-      padding: 5rem 1rem 3rem;
     }
 
-    .hero-box {
-      width: min(760px, 96vw);
-      border: 1px solid var(--green-dim);
-      position: relative;
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .nav-cta {
+      display: inline-flex;
+      padding: 9px 18px;
+      border: 1px solid var(--accent-blue);
+      border-radius: 4px;
+      color: var(--accent-blue);
+      font-size: 13px;
+      transition: background .15s, color .15s;
     }
 
-    .box-top, .box-bot {
-      display: flex;
-      align-items: center;
-      font-size: .7rem;
-      color: var(--muted);
-      letter-spacing: .12em;
-      padding: .3rem .8rem;
-      border-bottom: 1px solid var(--green-dim);
-      gap: .5rem;
-    }
-
-    .box-bot { border-top: 1px solid var(--green-dim); border-bottom: none; }
-
-    .box-dot { width:8px; height:8px; border-radius:50%; background:var(--green-dim); }
-    .box-dot.active { background:var(--green); box-shadow:0 0 6px var(--green); }
-
-    .box-title { color: var(--green); margin-left: .3rem; }
-
-    .hero-body { padding: 2.5rem 2.5rem 2rem; text-align: center; }
-
-    .hero-logo {
-      width: min(300px, 70vw);
-      margin-bottom: 1.8rem;
-      filter: drop-shadow(0 0 18px rgba(57,211,83,.45));
-      animation: glow 4s ease-in-out infinite;
-    }
-
-    @keyframes glow {
-      0%,100% { filter: drop-shadow(0 0 14px rgba(57,211,83,.35)); }
-      50%      { filter: drop-shadow(0 0 32px rgba(57,211,83,.65)); }
-    }
-
-    .ascii-mark {
-      font-size: clamp(.48rem, 1.4vw, .78rem);
-      line-height: 1.25;
-      color: var(--green);
-      white-space: pre;
-      display: block;
-      text-align: center;
-      text-shadow: 0 0 10px rgba(57,211,83,.5);
-      margin-bottom: 1.5rem;
-      overflow-x: auto;
-    }
-
-    .tagline {
-      font-size: .82rem;
-      color: var(--muted);
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      margin-bottom: .4rem;
-    }
-
-    .tagline::before { content: '// '; color: var(--green-dim); }
-
-    .location {
-      font-size: .75rem;
-      color: var(--muted);
-      letter-spacing: .1em;
-      margin-bottom: 2rem;
-    }
-
-    .location::before { content: '> '; color: var(--green); }
-
-    .hero-desc {
-      font-size: .85rem;
-      color: var(--text);
-      line-height: 1.85;
-      max-width: 520px;
-      margin: 0 auto 2.2rem;
-    }
-
-    .cur {
-      display: inline-block;
-      width: .55em; height: 1em;
-      background: var(--green);
-      vertical-align: text-bottom;
-      animation: blink .75s step-end infinite;
-    }
-
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-    .btn {
-      display: inline-block;
-      border: 1px solid var(--green);
-      padding: .55rem 2rem;
-      color: var(--green);
-      text-decoration: none;
-      font-family: inherit;
-      font-size: .82rem;
-      letter-spacing: .18em;
-      transition: all .15s;
-    }
-
-    .btn::before { content: '[ '; }
-    .btn::after  { content: ' ]'; }
-
-    .btn:hover {
-      background: var(--green);
-      color: var(--black);
-      box-shadow: 0 0 22px var(--green-glow);
-    }
-
-    /* ─── ASCII DIVIDER ─── */
-    .rule {
-      color: var(--green-dim);
-      font-size: .72rem;
-      text-align: center;
-      letter-spacing: .04em;
-      overflow: hidden;
-      white-space: nowrap;
-      padding: .2rem 0;
-      user-select: none;
-    }
+    .nav-cta:hover { background: var(--accent-blue); color: var(--bg-ground); }
 
     /* ─── SECTION COMMON ─── */
     .sec {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 5rem 1.5rem;
+      padding: 64px;
     }
 
-    .sec-label {
-      font-size: .68rem;
-      color: var(--green);
-      letter-spacing: .25em;
-      margin-bottom: .35rem;
+    .sec-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 40px;
     }
 
-    .sec-label::before { content: '// '; }
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: var(--accent-blue);
+    }
 
     .sec-title {
-      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-      color: var(--green);
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      margin-bottom: 3rem;
-    }
-
-    .sec-title::after {
-      content: '_';
-      animation: blink .75s step-end infinite;
+      font-weight: 600;
+      font-size: 28px;
+      color: var(--text-primary);
     }
 
     .sec-sub {
-      font-size: .82rem;
-      color: var(--text);
-      max-width: 640px;
-      margin: -2rem 0 3rem;
-      line-height: 1.8;
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin-top: 4px;
     }
 
-    /* ─── GRID / CARDS (Servicios + Portafolio) ─── */
+    /* ─── HERO ─── */
+    #hero {
+      display: flex;
+      justify-content: center;
+      padding: 96px 64px 88px;
+    }
+
+    .hero-panel {
+      width: min(880px, 100%);
+      border: 1px solid var(--accent-blue-dim);
+      padding: 56px 72px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      color: var(--accent-blue);
+    }
+
+    .hero-panel h1 {
+      font-weight: 700;
+      font-size: clamp(28px, 4.5vw, 48px);
+      line-height: 1.14;
+      color: var(--text-primary);
+    }
+
+    .hero-panel p.sub {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 640px;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      padding: 13px 28px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: opacity .15s, background .15s;
+    }
+
+    .btn-primary { background: var(--accent-blue); color: var(--bg-ground); }
+    .btn-primary:hover { opacity: .88; }
+
+    .btn-secondary { border: 1px solid var(--accent-blue-dim); color: var(--text-primary); }
+    .btn-secondary:hover { border-color: var(--accent-blue); }
+
+    .hero-meta {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .corner-tick {
+      position: absolute;
+      width: 14px;
+      height: 2px;
+      background: var(--accent-copper);
+      top: -1px;
+    }
+    .corner-tick.left { left: -1px; }
+    .corner-tick.right { right: -1px; }
+
+    /* ─── SERVICIOS / CARDS ─── */
     .grid-3 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      border: 1px solid var(--green-dim);
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      border: 1px solid var(--green-dim);
-      border-top: none;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
     }
 
     .card {
-      padding: 2rem 1.8rem;
-      border-right: 1px solid var(--green-dim);
-      border-bottom: 1px solid var(--green-dim);
-      position: relative;
-      transition: background .2s;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
-
-    .grid-3 .card:last-child { border-right: none; }
-    .grid-2 .card:nth-child(2n) { border-right: none; }
-    .card:hover { background: rgba(57,211,83,.025); }
 
     .card-id {
-      font-size: .65rem;
-      color: var(--muted);
-      letter-spacing: .15em;
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
     }
 
-    .badge {
-      font-size: .62rem;
-      letter-spacing: .1em;
-      padding: .15rem .5rem;
-      border: 1px solid var(--green-dim);
-      color: var(--green);
-      text-transform: uppercase;
+    .card h3 {
+      font-weight: 600;
+      font-size: 17px;
+      color: var(--text-primary);
     }
 
-    .badge.dev { color: #ffce6f; border-color: #4a3a1c; }
-
-    .card-head {
-      font-size: .88rem;
-      color: var(--green);
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      margin-bottom: 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-    }
-
-    .card-head::before { content: '>'; color: var(--green-dim); }
-
-    .feat {
+    .card ul {
       list-style: none;
-      margin-bottom: 1.2rem;
-    }
-
-    .feat li {
-      font-size: .78rem;
-      color: var(--muted);
-      padding: .18rem 0 .18rem 1rem;
-      position: relative;
-    }
-
-    .feat li::before {
-      content: '+';
-      position: absolute;
-      left: 0;
-      color: var(--green-dim);
-    }
-
-    .card-desc {
-      font-size: .78rem;
-      color: var(--muted);
-      line-height: 1.75;
-      border-top: 1px solid var(--border);
-      padding-top: 1rem;
-    }
-
-    /* ─── HARDWARE LAB STRIP ─── */
-    .lab-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      border: 1px solid var(--green-dim);
-      border-top: none;
-      margin-top: 1.5rem;
-    }
-
-    .lab-item {
-      padding: 1.3rem 1.5rem;
-      border-right: 1px solid var(--green-dim);
-      border-bottom: 1px solid var(--green-dim);
-    }
-
-    .lab-strip .lab-item:last-child { border-right: none; }
-
-    .lab-item-title {
-      font-size: .78rem;
-      color: var(--green);
-      letter-spacing: .06em;
-      margin-bottom: .4rem;
-    }
-
-    .lab-item-title::before { content: '// '; color: var(--green-dim); }
-
-    .lab-item-desc {
-      font-size: .72rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    /* ─── TRAYECTORIA (terminal) ─── */
-    .terminal {
-      border: 1px solid var(--green-dim);
-      position: relative;
-      margin-top: 1.5rem;
-    }
-
-    .term-bar {
       display: flex;
-      align-items: center;
-      gap: .4rem;
-      padding: .4rem .8rem;
-      border-bottom: 1px solid var(--green-dim);
-      font-size: .68rem;
-      color: var(--muted);
-      letter-spacing: .1em;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
     }
 
-    .term-bar .tbar-dot { width:8px; height:8px; border-radius:50%; }
-    .tbar-r { background: #3a1a1a; }
-    .tbar-y { background: #2a2a0a; }
-    .tbar-g { background: var(--green-dim); }
-    .term-bar .tbar-name { margin-left: .3rem; color: var(--green); }
+    .card p.desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
 
-    .term-body { padding: 1.5rem 1.8rem; }
+    /* ─── CÓMO TRABAJAMOS ─── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
 
-    .t-line {
-      font-size: .82rem;
-      margin-bottom: .5rem;
+    .step {
+      border-top: 2px solid var(--border);
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step.step-01 { border-top-color: var(--accent-copper); }
+
+    .step-num {
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: var(--accent-blue);
+    }
+
+    .step.step-01 .step-num { color: var(--accent-copper); }
+
+    .step h3 {
+      font-weight: 600;
+      font-size: 17px;
+      color: var(--text-primary);
+    }
+
+    .step p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 240px;
+    }
+
+    /* ─── TRAYECTORIA ─── */
+    .about-panel {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .about-panel p {
+      font-size: 15px;
       line-height: 1.7;
     }
 
-    .t-line .p  { color: var(--green); margin-right: .4rem; user-select: none; }
-    .t-line .c  { color: var(--green-hi); }
-    .t-line .o  { color: var(--text); }
-    .t-line .cm { color: var(--muted); }
+    .about-panel p:first-child { color: var(--text-primary); }
+    .about-panel p:last-child { color: var(--text-muted); }
 
     /* ─── CONTACTO ─── */
-    #contacto .sec { text-align: center; }
+    #contacto {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
 
     .contact-panel {
-      border: 1px solid var(--green-dim);
-      padding: 3rem 2rem;
-      margin-top: 1.5rem;
-      position: relative;
+      width: min(560px, 100%);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
     }
 
-    .contact-panel::before {
-      content: '// CONTACT.SYS';
-      position: absolute;
-      top: -.55rem;
-      left: 1rem;
-      background: var(--black);
-      padding: 0 .5rem;
-      font-size: .68rem;
-      color: var(--muted);
-      letter-spacing: .12em;
+    .contact-panel p.cp-text { font-size: 14px; color: var(--text-muted); }
+
+    .contact-mail {
+      font-weight: 500;
+      font-size: 20px;
+      color: var(--accent-blue);
+      transition: opacity .15s;
     }
+    .contact-mail:hover { opacity: .8; }
 
-    .cp-icon {
-      font-size: 1.6rem;
-      color: var(--green-dim);
-      margin-bottom: 1rem;
+    .contact-panel p.cp-loc {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
     }
-
-    .cp-text {
-      font-size: .88rem;
-      color: var(--text);
-      margin-bottom: .4rem;
-    }
-
-    .cp-text strong { color: var(--green); }
-
-    .cp-mail {
-      display: inline-block;
-      margin-top: .6rem;
-      color: var(--green);
-      font-size: 1rem;
-      text-decoration: none;
-      border-bottom: 1px solid var(--green-dim);
-      padding-bottom: .2rem;
-      transition: all .15s;
-    }
-
-    .cp-mail:hover { color: var(--green-hi); border-color: var(--green); }
-
-    .cp-sub {
-      font-size: .78rem;
-      color: var(--muted);
-      margin-top: 1.2rem;
-    }
-
-    .cp-sub span { color: var(--green); }
 
     /* ─── FOOTER ─── */
     footer {
-      border-top: 1px solid var(--green-dim);
-      padding: 1.2rem 1.5rem;
+      border-top: 1px solid var(--border);
+      padding: 24px 64px;
       text-align: center;
-      font-size: .72rem;
-      color: var(--muted);
-      letter-spacing: .07em;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
     }
 
-    footer span { color: var(--green); }
-
     /* ─── RESPONSIVE ─── */
-    @media (max-width: 640px) {
-      nav ul { display: none; }
-      .hero-body { padding: 1.8rem 1.2rem 1.5rem; }
-      .grid-3, .grid-2, .lab-strip { grid-template-columns: 1fr; }
-      .card { border-right: none; }
-      .lab-item { border-right: none; }
-      .sec-sub { margin-top: 0; }
+    @media (max-width: 720px) {
+      .sec, #hero, footer { padding-left: 24px; padding-right: 24px; }
+      .hero-panel { padding: 40px 24px; }
+      nav { padding: 16px 24px; }
     }
   </style>
 </head>
@@ -534,245 +364,130 @@
 
 <!-- ════ NAV ════ -->
 <nav>
-  <a href="#hero" class="nav-brand">
-    <img src="assets/icon.png" alt="ThugLab icon" />
-    <span><span class="dim">[</span>THUGLAB<span class="dim">]</span></span>
-  </a>
-  <div class="nav-status">
-    <div class="dot"></div>
-    ONLINE
+  <a href="#hero" class="nav-brand">thugLab</a>
+  <div class="nav-links mono">
+    <a href="#servicios">Servicios</a>
+    <a href="#como-trabajamos">Cómo trabajamos</a>
+    <a href="#trayectoria">Trayectoria</a>
   </div>
-  <ul>
-    <li><a href="#servicios">SERVICIOS</a></li>
-    <li><a href="#portafolio">PORTAFOLIO</a></li>
-    <li><a href="#trayectoria">TRAYECTORIA</a></li>
-    <li><a href="#contacto">CONTACTO</a></li>
-  </ul>
+  <a href="#contacto" class="nav-cta mono">Contactar</a>
 </nav>
 
 <!-- ════ HERO ════ -->
 <section id="hero">
-  <div class="hero-box">
-
-    <div class="box-top">
-      <div class="box-dot active"></div>
-      <div class="box-dot"></div>
-      <div class="box-dot"></div>
-      <span class="box-title">THUGLAB.SYS</span>
-      <span style="margin-left:auto">v1.1.0</span>
+  <div class="hero-panel">
+    <span class="corner-tick left"></span>
+    <span class="corner-tick right"></span>
+    <p class="hero-eyebrow mono">SOFTWARE · HARDWARE · IA APLICADA</p>
+    <h1>Ingeniería para operaciones<br>que no pueden fallar</h1>
+    <p class="sub">Diseñamos software de producción, prototipamos hardware conectado y aplicamos IA a problemas operativos reales.</p>
+    <div class="cta-row">
+      <a href="#contacto" class="btn btn-primary">Hablemos</a>
+      <a href="#servicios" class="btn btn-secondary">Ver servicios</a>
     </div>
-
-    <div class="hero-body">
-      <img src="assets/logo.png" alt="ThugLab Logo" class="hero-logo" />
-
-<pre class="ascii-mark"> _____  _  _ _   _  ___ _      _   ___
-|_   _|| || | | | |/ __| |    /_\ | _ )
-  | |  | __ | |_| | (_ | |__ / _ \| _ \
-  |_|  |_||_|\___/ \___|____/_/ \_\___/</pre>
-
-      <p class="tagline">Software · Hardware · IA Aplicada<span class="cur"></span></p>
-      <p class="location">Santiago, Chile &nbsp;·&nbsp; EST. 2026</p>
-
-      <p class="hero-desc">
-        Diseñamos software de producción, prototipamos hardware conectado<br>
-        y aplicamos IA a problemas operativos reales — para operaciones<br>
-        que no pueden fallar.
-      </p>
-
-      <a href="#contacto" class="btn">CONTACTAR</a>
-    </div>
-
-    <div class="box-bot">
-      <span>RUT: 78.349.729-8</span>
-      <span style="margin-left:auto">thuglab.cl</span>
-    </div>
-
+    <p class="hero-meta mono">SANTIAGO, CHILE · EST. 2026</p>
   </div>
 </section>
-
-<!-- ════ DIVIDER ════ -->
-<div class="rule">
-  ════════════════════════════════════════════════════════════════════════
-</div>
 
 <!-- ════ SERVICIOS ════ -->
-<section id="servicios">
-  <div class="sec">
-    <p class="sec-label">01 SERVICIOS</p>
-    <h2 class="sec-title">LO QUE HACEMOS</h2>
-
-    <div class="grid-3">
-
-      <div class="card">
-        <p class="card-id">[01/03] ─ SOFTWARE</p>
-        <h3 class="card-head">Software a Medida</h3>
-        <ul class="feat">
-          <li>Arquitectura enterprise (Clean Architecture, CQRS)</li>
-          <li>APIs y backends de producción</li>
-          <li>Apps móviles offline-first</li>
-          <li>Integración con sistemas empresariales (SAP, ERP)</li>
-        </ul>
-        <p class="card-desc">
-          Diseño y desarrollo de software a medida para operaciones que
-          no pueden fallar, desde backends enterprise hasta apps de campo.
-        </p>
-      </div>
-
-      <div class="card">
-        <p class="card-id">[02/03] ─ HARDWARE</p>
-        <h3 class="card-head">Prototipado &amp; IoT</h3>
-        <ul class="feat">
-          <li>Microcontroladores (ESP32, Arduino)</li>
-          <li>Sistemas embebidos (Raspberry Pi)</li>
-          <li>Sensores, GPS, comunicación inalámbrica</li>
-          <li>Integración física-digital</li>
-        </ul>
-        <p class="card-desc">
-          De la idea al dispositivo funcional: firmware, sensores y
-          dashboards en tiempo real para hardware conectado.
-        </p>
-      </div>
-
-      <div class="card">
-        <p class="card-id">[03/03] ─ IA</p>
-        <h3 class="card-head">IA &amp; Automatización</h3>
-        <ul class="feat">
-          <li>Agentes de IA (Claude, LLMs)</li>
-          <li>Automatización de procesos (RPA)</li>
-          <li>Integración de APIs de IA</li>
-          <li>Asesoría técnica</li>
-        </ul>
-        <p class="card-desc">
-          Aplicamos IA donde resuelve problemas reales: clasificación
-          automática, agentes operativos y procesos repetitivos.
-        </p>
-      </div>
-
+<section id="servicios" class="sec">
+  <div class="sec-header">
+    <p class="eyebrow mono">01 · SERVICIOS</p>
+    <h2 class="sec-title">Lo que hacemos</h2>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <p class="card-id mono">01/03</p>
+      <h3>Software a Medida</h3>
+      <ul>
+        <li>— Arquitectura enterprise (Clean Architecture, CQRS)</li>
+        <li>— APIs y backends de producción</li>
+        <li>— Apps móviles offline-first</li>
+        <li>— Integración con sistemas empresariales</li>
+      </ul>
+      <p class="desc">Diseño y desarrollo de software a medida para operaciones que no pueden fallar, desde backends enterprise hasta apps de campo.</p>
+    </div>
+    <div class="card">
+      <p class="card-id mono">02/03</p>
+      <h3>Prototipado &amp; IoT</h3>
+      <ul>
+        <li>— Microcontroladores (ESP32, Arduino)</li>
+        <li>— Sistemas embebidos (Raspberry Pi)</li>
+        <li>— Sensores, GPS, comunicación inalámbrica</li>
+        <li>— Integración física-digital</li>
+      </ul>
+      <p class="desc">De la idea al dispositivo funcional: firmware, sensores y dashboards en tiempo real para hardware conectado.</p>
+    </div>
+    <div class="card">
+      <p class="card-id mono">03/03</p>
+      <h3>IA &amp; Automatización</h3>
+      <ul>
+        <li>— Agentes de IA (Claude, LLMs)</li>
+        <li>— Automatización de procesos (RPA)</li>
+        <li>— Integración de APIs de IA</li>
+        <li>— Asesoría técnica</li>
+      </ul>
+      <p class="desc">Aplicamos IA donde resuelve problemas reales: clasificación automática, agentes operativos y procesos repetitivos.</p>
     </div>
   </div>
 </section>
 
-<!-- ════ DIVIDER ════ -->
-<div class="rule">
-  ════════════════════════════════════════════════════════════════════════
-</div>
-
-<!-- ════ PORTAFOLIO ════ -->
-<section id="portafolio">
-  <div class="sec">
-    <p class="sec-label">02 PORTAFOLIO</p>
-    <h2 class="sec-title">LO QUE CONSTRUIMOS</h2>
-    <p class="sec-sub">
-      Productos propios y en desarrollo. Cada uno combina al menos dos
-      de nuestras tres áreas: software, hardware o IA.
-    </p>
-
-    <div class="grid-2">
-
-      <div class="card">
-        <p class="card-id">PLANTCARE CONNECT <span class="badge dev">En desarrollo</span></p>
-        <h3 class="card-head">API de Monitoreo de Plantas</h3>
-        <p class="card-desc">
-          API propia para riego, luz y temperatura en tiempo real, con
-          kits físicos ESP32 + sensores opcionales. Nuestro proyecto
-          insignia: software, hardware e IA en un solo producto.
-        </p>
-      </div>
-
-      <div class="card">
-        <p class="card-id">GITLAB MONITOR <span class="badge">Producto propio</span></p>
-        <h3 class="card-head">Analítica de GitLab</h3>
-        <p class="card-desc">
-          Plataforma de monitoreo en tiempo real para instancias GitLab,
-          con resúmenes ejecutivos generados por IA vía Claude API.
-        </p>
-      </div>
-
+<!-- ════ CÓMO TRABAJAMOS ════ -->
+<section id="como-trabajamos" class="sec">
+  <div class="sec-header">
+    <p class="eyebrow mono">02 · CÓMO TRABAJAMOS</p>
+    <h2 class="sec-title">Un proceso claro, de punta a punta</h2>
+  </div>
+  <div class="steps">
+    <div class="step step-01">
+      <p class="step-num mono">01</p>
+      <h3>Diagnóstico</h3>
+      <p>Entendemos el problema real: la operación, los datos disponibles y las restricciones técnicas.</p>
     </div>
-
-    <div class="lab-strip">
-      <div class="lab-item">
-        <p class="lab-item-title">Star Tracker</p>
-        <p class="lab-item-desc">Raspberry Pi + motores paso a paso para seguimiento astronómico y astrofotografía.</p>
-      </div>
-      <div class="lab-item">
-        <p class="lab-item-title">Recepción Biométrica</p>
-        <p class="lab-item-desc">Control de acceso con lectura biométrica y registro de asistencia sobre Raspberry Pi.</p>
-      </div>
-      <div class="lab-item">
-        <p class="lab-item-title">Pañol</p>
-        <p class="lab-item-desc">Gestión de inventario, préstamos y devoluciones de herramientas y materiales.</p>
-      </div>
-      <div class="lab-item">
-        <p class="lab-item-title">WiFi/BLE Sniffer</p>
-        <p class="lab-item-desc">ESP32-WROVER + OLED con dashboard web embebido para análisis de redes.</p>
-      </div>
+    <div class="step">
+      <p class="step-num mono">02</p>
+      <h3>Diseño</h3>
+      <p>Arquitectura y prototipo mínimo viable, validado contigo antes de construir nada definitivo.</p>
+    </div>
+    <div class="step">
+      <p class="step-num mono">03</p>
+      <h3>Construcción</h3>
+      <p>Desarrollo iterativo con entregas frecuentes y visibilidad total del avance.</p>
+    </div>
+    <div class="step">
+      <p class="step-num mono">04</p>
+      <h3>Soporte</h3>
+      <p>Acompañamiento post-entrega: monitoreo, ajustes y evolución del sistema en producción.</p>
     </div>
   </div>
 </section>
-
-<!-- ════ DIVIDER ════ -->
-<div class="rule">
-  ════════════════════════════════════════════════════════════════════════
-</div>
 
 <!-- ════ TRAYECTORIA ════ -->
-<section id="trayectoria">
-  <div class="sec">
-    <p class="sec-label">03 TRAYECTORIA</p>
-    <h2 class="sec-title">QUIÉNES SOMOS</h2>
-
-    <div class="terminal">
-      <div class="term-bar">
-        <div class="tbar-dot tbar-r"></div>
-        <div class="tbar-dot tbar-y"></div>
-        <div class="tbar-dot tbar-g"></div>
-        <span class="tbar-name">about.txt</span>
-        <span style="margin-left:auto">bash</span>
-      </div>
-      <div class="term-body">
-        <div class="t-line"><span class="p">$</span><span class="c">cat about.txt</span></div>
-        <div class="t-line"><span class="o">ThugLab SpA es un estudio de ingenieria con base en Santiago, Chile.</span></div>
-        <div class="t-line"><span class="o">Construimos software de produccion, hardware conectado y soluciones</span></div>
-        <div class="t-line"><span class="o">de IA aplicada para operaciones que no pueden fallar.</span></div>
-        <div class="t-line">&nbsp;</div>
-        <div class="t-line"><span class="cm"># Detras de thugLab hay trayectoria real: liderazgo tecnico de</span></div>
-        <div class="t-line"><span class="cm"># sistemas criticos en operaciones a gran escala, desarrollo de</span></div>
-        <div class="t-line"><span class="cm"># plataformas propias con proteccion de propiedad industrial, y</span></div>
-        <div class="t-line"><span class="cm"># prototipos de hardware que van desde control de acceso</span></div>
-        <div class="t-line"><span class="cm"># biometrico hasta seguimiento astronomico.</span></div>
-        <div class="t-line">&nbsp;</div>
-        <div class="t-line"><span class="p">$</span><span class="cur"></span></div>
-      </div>
-    </div>
-
+<section id="trayectoria" class="sec">
+  <div class="sec-header">
+    <p class="eyebrow mono">03 · TRAYECTORIA</p>
+    <h2 class="sec-title">Quiénes somos</h2>
+  </div>
+  <div class="about-panel">
+    <p>thugLab SpA es un estudio de ingeniería con base en Santiago, Chile. Construimos software de producción, hardware conectado y soluciones de IA aplicada para operaciones que no pueden fallar.</p>
+    <p>Detrás de thugLab hay trayectoria real: liderazgo técnico de sistemas críticos en operaciones a gran escala, desarrollo de plataformas propias con protección de propiedad industrial, y prototipos de hardware que van desde control de acceso biométrico hasta seguimiento astronómico.</p>
   </div>
 </section>
 
-<!-- ════ DIVIDER ════ -->
-<div class="rule">
-  ════════════════════════════════════════════════════════════════════════
-</div>
-
 <!-- ════ CONTACTO ════ -->
-<section id="contacto">
-  <div class="sec">
-    <p class="sec-label">04 CONTACTO</p>
-    <h2 class="sec-title">HABLEMOS</h2>
-
-    <div class="contact-panel">
-      <p class="cp-icon">[@]</p>
-      <p class="cp-text">Escríbenos directamente, sin formularios de por medio.</p>
-      <a href="mailto:contacto@thuglab.cl" class="cp-mail">contacto@thuglab.cl</a>
-      <p class="cp-sub">Santiago, Chile &nbsp;·&nbsp; <span>thuglab.cl</span></p>
-    </div>
-
+<section id="contacto" class="sec">
+  <p class="eyebrow mono">04 · CONTACTO</p>
+  <h2 class="sec-title">Hablemos</h2>
+  <div class="contact-panel">
+    <p class="cp-text">Escríbenos directamente, sin formularios de por medio.</p>
+    <a href="mailto:contacto@thuglab.cl" class="contact-mail">contacto@thuglab.cl</a>
+    <p class="cp-loc mono">SANTIAGO, CHILE · THUGLAB.CL</p>
   </div>
 </section>
 
 <!-- ════ FOOTER ════ -->
-<footer>
-  &copy; 2026 <span>THUGLAB SpA</span> &nbsp;·&nbsp; RUT 78.349.729-8 &nbsp;·&nbsp; Santiago, Chile &nbsp;·&nbsp; <span>thuglab.cl</span>
+<footer class="mono">
+  © 2026 THUGLAB SPA · RUT 78.349.729-8 · SANTIAGO, CHILE · THUGLAB.CL
 </footer>
 
 </body>
