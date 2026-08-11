@@ -1,0 +1,15 @@
+{
+  "name": "thuglab-chat-api",
+  "version": "1.0.0",
+  "description": "Backend del chat con IA para thuglab.cl -- proxya a la API de Anthropic, guardando la key en el servidor.",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1"
+  }
+}
