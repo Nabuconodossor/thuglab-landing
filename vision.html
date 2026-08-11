@@ -431,28 +431,40 @@
     countValue.textContent = boxes.length;
   }
 
+  let consecutiveErrors = 0;
+
   async function loop() {
     if (!running) return;
-    const srcCanvas = document.createElement('canvas');
-    srcCanvas.width = video.videoWidth;
-    srcCanvas.height = video.videoHeight;
-    srcCanvas.getContext('2d').drawImage(video, 0, 0);
-
-    const { tensor, scale, padX, padY } = preprocess(srcCanvas);
     try {
-      const results = await session.run({ images: tensor });
-      const output = results[session.outputNames[0]];
-      const boxes = postprocess(output, { scale, padX, padY }, video.videoWidth, video.videoHeight);
-      draw(boxes);
+      if (video.videoWidth > 0 && video.videoHeight > 0) {
+        const srcCanvas = document.createElement('canvas');
+        srcCanvas.width = video.videoWidth;
+        srcCanvas.height = video.videoHeight;
+        srcCanvas.getContext('2d').drawImage(video, 0, 0);
+
+        const { tensor, scale, padX, padY } = preprocess(srcCanvas);
+        const results = await session.run({ images: tensor });
+        const output = results[session.outputNames[0]];
+        const boxes = postprocess(output, { scale, padX, padY }, video.videoWidth, video.videoHeight);
+        draw(boxes);
+
+        consecutiveErrors = 0;
+        if (statusText.textContent !== 'En vivo') setStatus('live', 'En vivo');
+      }
+
+      const now = performance.now();
+      fpsText.textContent = (1000 / (now - lastFrameTime)).toFixed(1) + ' fps';
+      lastFrameTime = now;
     } catch (err) {
-      console.error(err);
+      console.error('Fallo procesando un cuadro:', err);
+      consecutiveErrors++;
+      if (consecutiveErrors >= 5) {
+        setStatus('loading', 'Recuperando…');
+      }
+      // Nunca dejamos morir el bucle por un error de un solo cuadro: seguimos intentando.
+    } finally {
+      if (running) requestAnimationFrame(loop);
     }
-
-    const now = performance.now();
-    fpsText.textContent = (1000 / (now - lastFrameTime)).toFixed(1) + ' fps';
-    lastFrameTime = now;
-
-    requestAnimationFrame(loop);
   }
 
   startBtn.addEventListener('click', async () => {
@@ -461,8 +473,10 @@
     try {
       setStatus('loading', 'Cargando modelo…');
       if (!session) {
+        // wasm es más lento que webgl pero mucho más estable en GPUs de celulares
+        // (webgl con onnxruntime-web puede perder el contexto a los pocos segundos).
         session = await ort.InferenceSession.create(MODEL_URL, {
-          executionProviders: ['webgl', 'wasm']
+          executionProviders: ['wasm']
         });
       }
 
