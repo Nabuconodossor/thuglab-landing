@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Visión Artificial — thugLab</title>
+<meta name="description" content="Demo de detección de personas en tiempo real corriendo 100% en tu navegador. Nada se sube a un servidor." />
+
+<link rel="icon" href="assets/favicon.ico" sizes="any" />
+<link rel="icon" href="assets/icon-192.png" type="image/png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-ground:      #12161a;
+    --border:         #2a323b;
+    --text-primary:   #edf1f4;
+    --text-muted:     #8b96a3;
+    --accent-blue:    #3e7bfa;
+    --accent-blue-dim:#1f3a66;
+    --accent-copper:  #b8794a;
+    --accent-green:   #3ecf8e;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg-ground);
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  .mono { font-family: 'IBM Plex Mono', 'Courier New', monospace; font-weight: 500; }
+  a { color: inherit; text-decoration: none; }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px 32px;
+    padding: 20px 64px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand { font-weight: 600; font-size: 18px; letter-spacing: -0.18px; color: var(--text-primary); }
+  .nav-back { font-size: 13px; color: var(--text-muted); transition: color .15s; }
+  .nav-back:hover { color: var(--text-primary); }
+
+  main { padding: 64px; max-width: 960px; margin: 0 auto; }
+
+  .eyebrow { font-size: 12px; letter-spacing: 0.12em; color: var(--accent-blue); }
+  h1 { font-weight: 700; font-size: clamp(26px, 4vw, 38px); line-height: 1.2; margin-top: 8px; }
+  p.sub { font-size: 15px; line-height: 1.65; color: var(--text-muted); max-width: 640px; margin-top: 14px; }
+
+  .privacy-note {
+    margin-top: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid var(--accent-blue-dim);
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+    max-width: 640px;
+  }
+  .privacy-note .icon { width: 20px; height: 20px; flex-shrink: 0; color: var(--accent-blue); margin-top: 1px; }
+  .privacy-note strong { color: var(--text-primary); }
+
+  .stage {
+    margin-top: 40px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .stage-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  .status-dot { display: inline-flex; align-items: center; gap: 8px; }
+  .status-dot .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
+  .status-dot.live .dot { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+  .status-dot.loading .dot { background: var(--accent-copper); }
+
+  .video-wrap {
+    position: relative;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 320px;
+  }
+  video, canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  canvas { position: absolute; top: 0; left: 0; }
+
+  .placeholder {
+    padding: 64px 24px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .stage-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 28px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: opacity .15s, background .15s;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--accent-blue); color: var(--bg-ground); }
+  .btn-primary:hover { opacity: .88; }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+  .count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .count-badge .count-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--accent-blue);
+  }
+
+  .error-box {
+    margin-top: 16px;
+    border: 1px solid var(--accent-copper);
+    color: var(--accent-copper);
+    border-radius: 4px;
+    padding: 14px 18px;
+    font-size: 13px;
+    display: none;
+  }
+
+  .how-it-works {
+    margin-top: 56px;
+  }
+  .how-it-works h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+  .how-it-works ol { padding-left: 20px; color: var(--text-muted); font-size: 14px; line-height: 1.9; }
+  .how-it-works strong { color: var(--text-primary); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 64px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-top: 64px;
+  }
+
+  @media (max-width: 720px) {
+    nav, main, footer { padding-left: 24px; padding-right: 24px; }
+    .stage-controls { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--accent-copper);
+    color: var(--accent-copper);
+  }
+  .btn-outline:hover { background: rgba(184, 121, 74, .12); }
+  .btn-outline:disabled { opacity: .5; cursor: not-allowed; }
+
+  .photo-row {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 20px;
+  }
+  .photo-row.visible { display: block; }
+
+  .consent-panel {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    border: 1px solid var(--accent-copper);
+    border-radius: 4px;
+    padding: 18px 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .consent-panel.visible { display: flex; }
+  .consent-panel strong { color: var(--text-primary); }
+  .consent-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .consent-actions .btn { padding: 10px 20px; font-size: 13px; }
+
+  .capture-confirm {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--accent-green);
+    margin-top: 12px;
+  }
+  .capture-confirm.visible { display: flex; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html#hero" class="nav-brand">thugLab</a>
+  <a href="index.html" class="nav-back mono">&larr; Volver al sitio</a>
+</nav>
+
+<main>
+  <p class="eyebrow mono">DEMO · VISIÓN ARTIFICIAL</p>
+  <h1>Detección de personas en tiempo real</h1>
+  <p class="sub">Activa tu cámara y el modelo dibuja un cuadro sobre cada persona que detecta, en vivo, cuadro a cuadro. Es una muestra de cómo aplicamos IA de visión a problemas operativos reales (conteo de flujo, monitoreo de ocupación, alertas de presencia).</p>
+
+  <div class="privacy-note">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z"/></svg>
+    <span><strong>Nada sale de tu navegador.</strong> El modelo corre localmente en tu dispositivo (WebAssembly/WebGL). No enviamos, procesamos ni guardamos ningún video o imagen en nuestros servidores.</span>
+  </div>
+
+  <div class="stage">
+    <div class="stage-header">
+      <span class="status-dot mono" id="statusDot"><span class="dot"></span><span id="statusText">Inactivo</span></span>
+      <span class="mono" id="fpsText"></span>
+    </div>
+    <div class="video-wrap" id="videoWrap">
+      <p class="placeholder" id="placeholder">La cámara aparecerá aquí una vez que la actives.</p>
+      <video id="video" autoplay playsinline muted style="display:none;"></video>
+      <canvas id="overlay" style="display:none;"></canvas>
+    </div>
+    <div class="stage-controls">
+      <button class="btn btn-primary mono" id="startBtn">Activar cámara</button>
+      <span class="count-badge mono">Personas detectadas: <span class="count-value" id="countValue">0</span></span>
+    </div>
+    <div class="photo-row" id="photoRow">
+      <button class="btn btn-outline mono" id="photoBtn">📸 Capturar foto para Instagram</button>
+      <div class="consent-panel" id="consentPanel">
+        <span><strong>Antes de capturar:</strong> esto va a tomar una foto del video con las cajas de detección dibujadas y descargarla a tu computador. thugLab podría usarla en su Instagram. Nada se sube automáticamente — la foto queda en tu equipo hasta que alguien decida compartirla.</span>
+        <div class="consent-actions">
+          <button class="btn btn-primary mono" id="consentYes">Sí, capturar y descargar</button>
+          <button class="btn btn-outline mono" id="consentNo">Cancelar</button>
+        </div>
+      </div>
+      <div class="capture-confirm mono" id="captureConfirm">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17L4 12"/></svg>
+        <span>Foto descargada — ya está en tu computador para que la compartas cuando quieras.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="error-box mono" id="errorBox"></div>
+
+  <div class="how-it-works">
+    <h2>Cómo funciona</h2>
+    <ol>
+      <li>Tu navegador pide permiso de cámara — el video nunca se transmite a ningún servidor.</li>
+      <li>Cargamos <strong>YOLOv8</strong> (exportado a ONNX) directamente en la pestaña del navegador.</li>
+      <li>Cada cuadro se procesa localmente con WebAssembly/WebGL y se dibujan los cuadros de detección sobre el video.</li>
+      <li>Al cerrar la pestaña, todo desaparece — no queda ningún registro.</li>
+    </ol>
+  </div>
+</main>
+
+<footer class="mono">
+  © 2026 THUGLAB SPA · RUT 78.349.729-8 · SANTIAGO, CHILE · THUGLAB.CL
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.min.js"></script>
+<script>
+(function () {
+  const MODEL_URL = 'assets/models/yolov8n.onnx';
+  const INPUT_SIZE = 640;
+  const CONF_THRESHOLD = 0.45;
+  const IOU_THRESHOLD = 0.45;
+  const PERSON_CLASS_ID = 0; // COCO class 0 = person
+
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('overlay');
+  const ctx = canvas.getContext('2d');
+  const placeholder = document.getElementById('placeholder');
+  const startBtn = document.getElementById('startBtn');
+  const statusDot = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+  const fpsText = document.getElementById('fpsText');
+  const countValue = document.getElementById('countValue');
+  const errorBox = document.getElementById('errorBox');
+  const photoRow = document.getElementById('photoRow');
+  const photoBtn = document.getElementById('photoBtn');
+  const consentPanel = document.getElementById('consentPanel');
+  const consentYes = document.getElementById('consentYes');
+  const consentNo = document.getElementById('consentNo');
+  const captureConfirm = document.getElementById('captureConfirm');
+
+  let session = null;
+  let running = false;
+  let lastFrameTime = performance.now();
+
+  function showError(msg) {
+    errorBox.textContent = msg;
+    errorBox.style.display = 'block';
+  }
+
+  function setStatus(mode, text) {
+    statusDot.className = 'status-dot mono' + (mode ? ' ' + mode : '');
+    statusText.textContent = text;
+  }
+
+  // Letterbox-resize a video frame into a square INPUT_SIZE canvas, returns scale/pad info.
+  function preprocess(srcCanvas) {
+    const off = document.createElement('canvas');
+    off.width = INPUT_SIZE;
+    off.height = INPUT_SIZE;
+    const octx = off.getContext('2d');
+    octx.fillStyle = '#727272';
+    octx.fillRect(0, 0, INPUT_SIZE, INPUT_SIZE);
+
+    const scale = Math.min(INPUT_SIZE / srcCanvas.width, INPUT_SIZE / srcCanvas.height);
+    const newW = Math.round(srcCanvas.width * scale);
+    const newH = Math.round(srcCanvas.height * scale);
+    const padX = Math.floor((INPUT_SIZE - newW) / 2);
+    const padY = Math.floor((INPUT_SIZE - newH) / 2);
+    octx.drawImage(srcCanvas, 0, 0, srcCanvas.width, srcCanvas.height, padX, padY, newW, newH);
+
+    const imgData = octx.getImageData(0, 0, INPUT_SIZE, INPUT_SIZE).data;
+    const chw = new Float32Array(3 * INPUT_SIZE * INPUT_SIZE);
+    const plane = INPUT_SIZE * INPUT_SIZE;
+    for (let i = 0; i < plane; i++) {
+      chw[i] = imgData[i * 4] / 255;             // R
+      chw[plane + i] = imgData[i * 4 + 1] / 255;  // G
+      chw[2 * plane + i] = imgData[i * 4 + 2] / 255; // B
+    }
+    return { tensor: new ort.Tensor('float32', chw, [1, 3, INPUT_SIZE, INPUT_SIZE]), scale, padX, padY };
+  }
+
+  function iou(a, b) {
+    const x1 = Math.max(a.x1, b.x1), y1 = Math.max(a.y1, b.y1);
+    const x2 = Math.min(a.x2, b.x2), y2 = Math.min(a.y2, b.y2);
+    const inter = Math.max(0, x2 - x1) * Math.max(0, y2 - y1);
+    const areaA = (a.x2 - a.x1) * (a.y2 - a.y1);
+    const areaB = (b.x2 - b.x1) * (b.y2 - b.y1);
+    return inter / (areaA + areaB - inter);
+  }
+
+  function nms(boxes) {
+    boxes.sort((a, b) => b.score - a.score);
+    const kept = [];
+    for (const box of boxes) {
+      if (kept.every(k => iou(k, box) < IOU_THRESHOLD)) kept.push(box);
+    }
+    return kept;
+  }
+
+  // YOLOv8 ONNX output: [1, 84, 8400] -> 4 box coords + 80 class scores, per anchor.
+  function postprocess(output, meta, srcW, srcH) {
+    const data = output.data;
+    const numAnchors = output.dims[2]; // 8400
+    const numAttrs = output.dims[1];   // 84
+    const boxes = [];
+
+    for (let i = 0; i < numAnchors; i++) {
+      let bestScore = 0;
+      // class scores start at attribute index 4
+      const score = data[(4 + PERSON_CLASS_ID) * numAnchors + i];
+      if (score > CONF_THRESHOLD) {
+        const cx = data[0 * numAnchors + i];
+        const cy = data[1 * numAnchors + i];
+        const w = data[2 * numAnchors + i];
+        const h = data[3 * numAnchors + i];
+
+        let x1 = cx - w / 2, y1 = cy - h / 2, x2 = cx + w / 2, y2 = cy + h / 2;
+        // undo letterbox padding/scale back to source video pixel space
+        x1 = (x1 - meta.padX) / meta.scale;
+        y1 = (y1 - meta.padY) / meta.scale;
+        x2 = (x2 - meta.padX) / meta.scale;
+        y2 = (y2 - meta.padY) / meta.scale;
+
+        boxes.push({
+          x1: Math.max(0, x1), y1: Math.max(0, y1),
+          x2: Math.min(srcW, x2), y2: Math.min(srcH, y2),
+          score
+        });
+      }
+    }
+    return nms(boxes);
+  }
+
+  function draw(boxes) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#3e7bfa';
+    ctx.font = '600 14px Inter, sans-serif';
+    for (const b of boxes) {
+      ctx.strokeRect(b.x1, b.y1, b.x2 - b.x1, b.y2 - b.y1);
+      const label = `Persona ${(b.score * 100).toFixed(0)}%`;
+      const textW = ctx.measureText(label).width;
+      ctx.fillStyle = '#3e7bfa';
+      ctx.fillRect(b.x1, Math.max(0, b.y1 - 22), textW + 12, 22);
+      ctx.fillStyle = '#12161a';
+      ctx.fillText(label, b.x1 + 6, Math.max(14, b.y1 - 6));
+    }
+    countValue.textContent = boxes.length;
+  }
+
+  async function loop() {
+    if (!running) return;
+    const srcCanvas = document.createElement('canvas');
+    srcCanvas.width = video.videoWidth;
+    srcCanvas.height = video.videoHeight;
+    srcCanvas.getContext('2d').drawImage(video, 0, 0);
+
+    const { tensor, scale, padX, padY } = preprocess(srcCanvas);
+    try {
+      const results = await session.run({ images: tensor });
+      const output = results[session.outputNames[0]];
+      const boxes = postprocess(output, { scale, padX, padY }, video.videoWidth, video.videoHeight);
+      draw(boxes);
+    } catch (err) {
+      console.error(err);
+    }
+
+    const now = performance.now();
+    fpsText.textContent = (1000 / (now - lastFrameTime)).toFixed(1) + ' fps';
+    lastFrameTime = now;
+
+    requestAnimationFrame(loop);
+  }
+
+  startBtn.addEventListener('click', async () => {
+    startBtn.disabled = true;
+    errorBox.style.display = 'none';
+    try {
+      setStatus('loading', 'Cargando modelo…');
+      if (!session) {
+        session = await ort.InferenceSession.create(MODEL_URL, {
+          executionProviders: ['webgl', 'wasm']
+        });
+      }
+
+      setStatus('loading', 'Pidiendo permiso de cámara…');
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+      video.srcObject = stream;
+      await video.play();
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      placeholder.style.display = 'none';
+      video.style.display = 'block';
+      canvas.style.display = 'block';
+
+      setStatus('live', 'En vivo');
+      startBtn.textContent = 'Cámara activa';
+      running = true;
+      photoRow.classList.add('visible');
+      loop();
+    } catch (err) {
+      console.error(err);
+      setStatus('', 'Error');
+      startBtn.disabled = false;
+      startBtn.textContent = 'Activar cámara';
+      if (err.name === 'NotAllowedError') {
+        showError('Necesitamos permiso de cámara para correr la demo. Revisa los permisos del sitio en tu navegador e inténtalo de nuevo.');
+      } else {
+        showError('No pudimos iniciar la demo: ' + err.message);
+      }
+    }
+  });
+
+  // Foto para Instagram — opt-in explícito, separado de "Activar cámara".
+  // Por defecto no pasa nada; solo captura si la persona confirma en el panel de consentimiento.
+  photoBtn.addEventListener('click', () => {
+    captureConfirm.classList.remove('visible');
+    consentPanel.classList.toggle('visible');
+  });
+
+  consentNo.addEventListener('click', () => {
+    consentPanel.classList.remove('visible');
+  });
+
+  consentYes.addEventListener('click', () => {
+    const shot = document.createElement('canvas');
+    shot.width = video.videoWidth;
+    shot.height = video.videoHeight;
+    const sctx = shot.getContext('2d');
+    sctx.drawImage(video, 0, 0, shot.width, shot.height);
+    sctx.drawImage(canvas, 0, 0, shot.width, shot.height); // overlay con las cajas de detección
+
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const link = document.createElement('a');
+    link.download = `thuglab-vision-demo-${stamp}.jpg`;
+    link.href = shot.toDataURL('image/jpeg', 0.92);
+    link.click();
+
+    consentPanel.classList.remove('visible');
+    captureConfirm.classList.add('visible');
+  });
+})();
+</script>
+
+</body>
+</html>
