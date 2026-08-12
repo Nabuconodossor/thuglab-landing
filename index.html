@@ -580,6 +580,7 @@
       z-index: 1000;
       width: min(360px, calc(100vw - 48px));
       height: min(520px, calc(100vh - 140px));
+      height: min(520px, calc(100dvh - 140px));
       background: var(--bg-ground);
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -654,8 +655,25 @@
       .nav-links { order: 3; flex-basis: 100%; justify-content: center; }
       .spotlight-body { padding: 24px; }
       .spotlight-sensors { gap: 32px; }
-      .chat-panel { right: 12px; bottom: 84px; }
-      .chat-toggle { right: 16px; bottom: 16px; }
+      .chat-toggle {
+        right: 16px;
+        bottom: 16px;
+        padding: 15px;
+        gap: 0;
+      }
+      .chat-toggle .toggle-label { display: none; }
+      .chat-input-row input { font-size: 16px; } /* evita el auto-zoom de Safari iOS en inputs <16px */
+      .chat-panel {
+        right: 12px;
+        bottom: 80px;
+        width: min(360px, calc(100vw - 24px));
+        height: min(70vh, calc(100vh - 108px));
+        height: min(70dvh, calc(100dvh - 108px));
+      }
+    }
+
+    @media (max-width: 400px) {
+      .chat-panel { right: 8px; width: calc(100vw - 16px); }
     }
   </style>
 </head>
@@ -852,7 +870,7 @@
 <!-- ════ CHAT WIDGET ════ -->
 <button class="chat-toggle mono" id="chatToggle">
   <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3097 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.6056 8.7 3.9C9.87812 3.30493 11.1801 2.99656 12.5 3H13C15.0843 3.11499 17.053 3.99476 18.5291 5.47091C20.0052 6.94706 20.885 8.91565 21 11V11.5Z"/></svg>
-  Habla con thugLab
+  <span class="toggle-label">Habla con thugLab</span>
 </button>
 
 <div class="chat-panel" id="chatPanel">
