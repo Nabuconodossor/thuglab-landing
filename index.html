@@ -40,6 +40,11 @@
 
     html { scroll-behavior: smooth; }
 
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden; /* nada puede forzar scroll horizontal de la página completa */
+    }
+
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background: var(--bg-ground);
@@ -435,7 +440,7 @@
     /* ─── PROYECTOS (grid) ─── */
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 24px;
       max-width: 1240px;
       margin: 0 auto;
@@ -660,7 +665,7 @@
       .sec, #hero, footer { padding-left: 24px; padding-right: 24px; }
       .hero-panel { padding: 40px 24px; }
       nav { padding: 16px 24px; }
-      .nav-links { order: 3; flex-basis: 100%; justify-content: center; }
+      .nav-links { order: 3; flex-basis: 100%; justify-content: center; flex-wrap: wrap; gap: 10px 20px; }
       .spotlight-body { padding: 24px; }
       .spotlight-sensors { gap: 32px; }
       .chat-toggle {
