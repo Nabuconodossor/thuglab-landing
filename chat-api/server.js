@@ -8,7 +8,7 @@ const MODEL = process.env.CHAT_MODEL || 'claude-haiku-4-5-20251001';
 
 const MAX_MESSAGE_LEN = 2000;
 const MAX_HISTORY = 20; // mensajes (usuario + asistente combinados)
-const MAX_TOKENS = 600;
+const MAX_TOKENS = 400; // acotado a propósito -- es una demo puntual, no un producto de alto tráfico
 
 const SYSTEM_PROMPT = `Eres el asistente de thugLab SpA, un estudio de ingeniería con base en Santiago, Chile, hablando con visitantes de thuglab.cl.
 
