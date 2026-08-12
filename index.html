@@ -665,7 +665,9 @@
       .spotlight-sensors { gap: 32px; }
       .chat-toggle {
         right: 16px;
-        bottom: 16px;
+        /* 76px, no 16px: en Chrome/Android real (no en la emulación de DevTools)
+           la barra inferior del navegador tapaba el botón con poco margen. */
+        bottom: max(16px, env(safe-area-inset-bottom, 0px) + 76px);
         padding: 15px;
         gap: 0;
       }
@@ -673,10 +675,10 @@
       .chat-input-row input { font-size: 16px; } /* evita el auto-zoom de Safari iOS en inputs <16px */
       .chat-panel {
         right: 12px;
-        bottom: 80px;
+        bottom: max(80px, env(safe-area-inset-bottom, 0px) + 140px);
         width: min(360px, calc(100vw - 24px));
-        height: min(70vh, calc(100vh - 108px));
-        height: min(70dvh, calc(100dvh - 108px));
+        height: min(70vh, calc(100vh - 168px));
+        height: min(70dvh, calc(100dvh - 168px));
       }
     }
 
