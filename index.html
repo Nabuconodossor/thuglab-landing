@@ -549,19 +549,30 @@
     footer {
       border-top: 1px solid var(--border);
       padding: 24px 64px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
       font-size: 11px;
       letter-spacing: 0.04em;
       color: var(--text-muted);
     }
 
-    .footer-share {
-      display: block;
-      margin-top: 8px;
-      color: var(--accent-blue);
-      text-decoration: none;
+    .footer-social {
+      display: flex;
+      gap: 20px;
+      align-items: center;
     }
-    .footer-share:hover { text-decoration: underline; }
+
+    .footer-social a {
+      color: var(--text-muted);
+      transition: color .15s;
+      display: flex;
+      align-items: center;
+    }
+    .footer-social a:hover { color: var(--accent-blue); }
+    .footer-social svg { width: 18px; height: 18px; }
 
     /* ─── CHAT WIDGET ─── */
     .chat-toggle {
@@ -663,6 +674,7 @@
     /* ─── RESPONSIVE ─── */
     @media (max-width: 720px) {
       .sec, #hero, footer { padding-left: 24px; padding-right: 24px; }
+      footer { justify-content: center; text-align: center; }
       .hero-panel { padding: 40px 24px; }
       nav { padding: 16px 24px; }
       .nav-links { order: 3; flex-basis: 100%; justify-content: center; flex-wrap: wrap; gap: 10px 20px; }
@@ -919,13 +931,21 @@
 
 <!-- ════ FOOTER ════ -->
 <footer class="mono">
-  © 2026 THUGLAB SPA · RUT 78.349.729-8 · SANTIAGO, CHILE · THUGLAB.CL
-  <a
-    href="https://www.facebook.com/sharer/sharer.php?u=https://thuglab.cl"
-    target="_blank"
-    rel="noopener"
-    class="footer-share"
-  >Compartir en Facebook</a>
+  <span>© 2026 THUGLAB SPA · RUT 78.349.729-8 · SANTIAGO, CHILE</span>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/agentegixxer/" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61592856014953" target="_blank" rel="noopener" aria-label="Facebook">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+      </svg>
+    </a>
+  </div>
 </footer>
 
 <!-- ════ CHAT WIDGET ════ -->
