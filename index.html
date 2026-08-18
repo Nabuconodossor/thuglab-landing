@@ -551,9 +551,9 @@
       padding: 24px 64px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 24px;
       font-size: 11px;
       letter-spacing: 0.04em;
       color: var(--text-muted);
@@ -674,7 +674,7 @@
     /* ─── RESPONSIVE ─── */
     @media (max-width: 720px) {
       .sec, #hero, footer { padding-left: 24px; padding-right: 24px; }
-      footer { justify-content: center; text-align: center; }
+      footer { justify-content: center; text-align: center; flex-direction: column; gap: 12px; }
       .hero-panel { padding: 40px 24px; }
       nav { padding: 16px 24px; }
       .nav-links { order: 3; flex-basis: 100%; justify-content: center; flex-wrap: wrap; gap: 10px 20px; }
@@ -931,7 +931,6 @@
 
 <!-- ════ FOOTER ════ -->
 <footer class="mono">
-  <span>© 2026 THUGLAB SPA · RUT 78.349.729-8 · SANTIAGO, CHILE</span>
   <div class="footer-social">
     <a href="https://www.instagram.com/agentegixxer/" target="_blank" rel="noopener" aria-label="Instagram">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -946,6 +945,7 @@
       </svg>
     </a>
   </div>
+  <span>© 2026 THUGLAB SPA · RUT 78.349.729-8 · SANTIAGO, CHILE</span>
 </footer>
 
 <!-- ════ CHAT WIDGET ════ -->
